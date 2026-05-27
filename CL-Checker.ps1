@@ -3,7 +3,7 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     Start-Process PowerShell -Verb RunAs -ArgumentList "-ExecutionPolicy Bypass -WindowStyle Hidden -File `"$PSCommandPath`""; exit
 }
 $ErrorActionPreference = 'SilentlyContinue'
-$VERSION = '3.0'
+$VERSION = '1.0'
 $UPDATE_URL = 'https://raw.githubusercontent.com/kitlerkanake70771-collab/CL-Checker/main/CL-Checker.ps1'
 $VERSION_URL = 'https://raw.githubusercontent.com/kitlerkanake70771-collab/CL-Checker/main/version.txt'
 Add-Type -AssemblyName System.Windows.Forms,System.Drawing
@@ -52,8 +52,7 @@ $updBtn.Cursor=[System.Windows.Forms.Cursors]::Hand
 $updBtn.Add_Click({
     $this.Text='[checking...]'
     $lv = CheckUpdate
-    if($lv){$this.Text='[update ready]';$this.ForeColor=$gr}
-    else{$this.Text='[check update]';$this.ForeColor=$a2}
+    $this.Text='[check update]';$this.ForeColor=$a2
 })
 $hd.Controls.AddRange(@($verLbl,$updBtn))
 $f.Controls.Add($hd)
@@ -355,13 +354,27 @@ function CheckUpdate {
     try{
         $wc=New-Object System.Net.WebClient
         $remote=$wc.DownloadString($VERSION_URL).Trim()
+        if($remote){
+            if($remote -ne $VERSION){
+                $r=[System.Windows.Forms.MessageBox]::Show("New version v$remote available (you have v$VERSION). Update now?","Update Available","YesNo","Information")
+                if($r -eq 'Yes'){DoUpdate}
+                return $true
+            }else{
+                [System.Windows.Forms.MessageBox]::Show("You are up to date! (v$VERSION)","No Update","OK","Information")
+            }
+        }
+    }catch{er "Update check failed - no internet?"}
+    return $false
+}
+function CheckUpdateSilent {
+    try{
+        $wc=New-Object System.Net.WebClient
+        $remote=$wc.DownloadString($VERSION_URL).Trim()
         if($remote -and $remote -ne $VERSION){
             $r=[System.Windows.Forms.MessageBox]::Show("New version v$remote available (you have v$VERSION). Update now?","Update Available","YesNo","Information")
             if($r -eq 'Yes'){DoUpdate}
-            return $true
         }
     }catch{}
-    return $false
 }
 function DoUpdate {
     try{
@@ -384,4 +397,5 @@ start "" "$scriptDir\CL-Checker.bat"
 # ========== INIT ==========
 wl '';wl '  +=============================+' 'Pink';wl '  |     CL CHECKER               |' 'Pink';wl '  |     Support Tool             |' 'Pink';wl '  +=============================+' 'Pink';wl ''
 inf 'Admin mode | Check items > CHECK SELECTED / FIX SELECTED / ALL CHECKS';wl ''
-$f.Add_Shown({$f.Activate()});[System.Windows.Forms.Application]::Run($f)
+$f.Add_Shown({$f.Activate();CheckUpdateSilent})
+[System.Windows.Forms.Application]::Run($f)
