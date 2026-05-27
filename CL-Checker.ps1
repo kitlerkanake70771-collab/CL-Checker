@@ -3,7 +3,7 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     Start-Process PowerShell -Verb RunAs -ArgumentList "-ExecutionPolicy Bypass -WindowStyle Hidden -File `"$PSCommandPath`""; exit
 }
 $ErrorActionPreference = 'SilentlyContinue'
-$VERSION = '1.1'
+$VERSION = '1.0'
 $UPDATE_URL = 'https://raw.githubusercontent.com/kitlerkanake70771-collab/CL-Checker/main/CL-Checker.ps1'
 $VERSION_URL = 'https://raw.githubusercontent.com/kitlerkanake70771-collab/CL-Checker/main/version.txt'
 Add-Type -AssemblyName System.Windows.Forms,System.Drawing
