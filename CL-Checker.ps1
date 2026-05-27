@@ -4,8 +4,8 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 }
 $ErrorActionPreference = 'SilentlyContinue'
 $VERSION = '3.0'
-$UPDATE_URL = 'https://raw.githubusercontent.com/YOUR_USER/YOUR_REPO/main/CL-Checker.ps1'
-$VERSION_URL = 'https://raw.githubusercontent.com/YOUR_USER/YOUR_REPO/main/version.txt'
+$UPDATE_URL = 'https://raw.githubusercontent.com/kitlerkanake70771-collab/CL-Checker/main/CL-Checker.ps1'
+$VERSION_URL = 'https://raw.githubusercontent.com/kitlerkanake70771-collab/CL-Checker/main/version.txt'
 Add-Type -AssemblyName System.Windows.Forms,System.Drawing
 
 # ========== THEME ==========
